@@ -13,6 +13,7 @@ from tweepy import Stream
 from tweepy import OAuthHandler
 from tweepy.streaming import StreamListener
 from tweepy import API 
+from tweepy import RateLimitError
 import json
 import nltk
 import warnings
@@ -49,6 +50,7 @@ class TwitterClient(object):
             nltk.download('stopwords')
             nltk.download('wordnet')
             nltk.download('averaged_perceptron_tagger')
+            nltk.download('punkt')
         stop_words = nltk.corpus.stopwords.words('english')
         stop_words.remove('no')
         stop_words.remove('not')
@@ -114,24 +116,56 @@ class TwitterClient(object):
 
 def main():
     TC = TwitterClient()
-    Tweets = pd.DataFrame()
-    num = 0
-    max_id = None
-    N = 250  # number of tweets needed to download
-    query = 'Trump' # query keyword
+#    querydict = {'ABT':'Abbott Laboratories','AIZ':'Assurant, Inc','APD':'Air Products and Chemicals, Inc','BKR':'Baker Hughes Company', \
+ #                'BXP':'Boston Properties, Inc','CSCO':'Cisco Systems, Inc','ETN':'Eaton Corporation plc','FLT':'FLEETCOR Technologies, Inc', \
+  #               'GS':'The Goldman Sachs Group, Inc','GWW':'W.W. Grainger, Inc', 'HCA':'HCA Healthcare, Inc','WM':'Waste Management, Inc'}
+    querydict = {'AIZ':'Assurant, Inc','APD':'Air Products and Chemicals, Inc'}
     # can download up to 100 tweets every 15 minutes
-    while num < N:
-        print('{} time download'.format(num // 100 + 1))
-        tweets, stopped_id = TC.download_tweets(query, count = 100, max_id = max_id)
-        Tweets = pd.concat([Tweets, tweets], ignore_index = True)
-        max_id = stopped_id
-        num += len(tweets)
-        for i in range(15):
-            time.sleep(60)
-            print('slept for {} minutes'.format(i+1))
-        print('can re-download now')
-    Tweets.to_csv('./tweets.csv')
+    for ticker, full in zip(querydict.keys(), querydict.values()):    
+        Tweets = pd.DataFrame()
+        num = 0
+        max_id = None
+        while True:
+            try:
+                query = ticker + ' OR ' + full
+                tweets, stopped_id = TC.download_tweets(query, count = 100, max_id = max_id)
+                Tweets = pd.concat([Tweets, tweets], ignore_index = True)
+                max_id = stopped_id
+                num += len(tweets)
+                if num % 100 == 0:
+                    print('{} tweets have been downloaded.'.format(num))
+            except RateLimitError:
+                for i in range(15):
+                    time.sleep(60)
+                    print('slept for {} minutes'.format(i+1))
+                print('can re-download now')
+            except:
+                print('all 7-day tweets have been downloaded.')
+                Tweets.to_csv('./tweets/' + ticker + '.csv')
+                break
 
 
 if __name__ == '__main__':
     main()
+    
+    
+ 
+    
+   
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
