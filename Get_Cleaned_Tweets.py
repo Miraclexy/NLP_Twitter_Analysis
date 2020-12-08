@@ -14,6 +14,7 @@ from tweepy import OAuthHandler
 from tweepy.streaming import StreamListener
 from tweepy import API 
 from tweepy import RateLimitError
+import tweepy
 import json
 import nltk
 import warnings
@@ -25,12 +26,13 @@ from textblob import TextBlob
 import re
 import time
 
+
 '''
 Download tweets through Twitter API, clean tweets and get sentiments
 '''
 class TwitterClient(object):
     def __init__(self): 
-        #consumer key, consumer secret, access token, access secret.
+        # consumer key, consumer secret, access token, access secret.
         ckey = ''
         csecret = ''
         atoken = ''
@@ -96,7 +98,7 @@ class TwitterClient(object):
         else: 
             return 'negative'
         
-    def download_tweets(self, query, count, max_id = None): 
+    def download_tweets(self, query, count, until, max_id = None): 
         def helper(tweets):
             df = pd.DataFrame(data=[tweet.text for tweet in tweets], columns=['text'])
             df['id'] = np.array([tweet.id for tweet in tweets])
@@ -109,63 +111,56 @@ class TwitterClient(object):
             df['sentiment'] = df.text.apply(self.get_sentiment,True)
             return df
         # api.user_timeline(screen_name, count, page) 
-        tweets = self.api.search(q = query + '-filter:retweets', lang = 'en', count = count, max_id = max_id)
+        tweets = self.api.search(q = query + '-filter:retweets', lang = 'en', count = count, until = until, max_id = max_id, result_type = "recent")
         stopped_id = tweets[-1].id
         return helper(tweets), stopped_id
 
 
-def main():
-    TC = TwitterClient()
-#    querydict = {'ABT':'Abbott Laboratories','AIZ':'Assurant, Inc','APD':'Air Products and Chemicals, Inc','BKR':'Baker Hughes Company', \
- #                'BXP':'Boston Properties, Inc','CSCO':'Cisco Systems, Inc','ETN':'Eaton Corporation plc','FLT':'FLEETCOR Technologies, Inc', \
-  #               'GS':'The Goldman Sachs Group, Inc','GWW':'W.W. Grainger, Inc', 'HCA':'HCA Healthcare, Inc','WM':'Waste Management, Inc'}
-    querydict = {'AIZ':'Assurant, Inc','APD':'Air Products and Chemicals, Inc'}
+def main(ticker, full):
     # can download up to 100 tweets every 15 minutes
-    for ticker, full in zip(querydict.keys(), querydict.values()):    
-        Tweets = pd.DataFrame()
-        num = 0
-        max_id = None
-        while True:
-            try:
-                query = ticker + ' OR ' + full
-                tweets, stopped_id = TC.download_tweets(query, count = 100, max_id = max_id)
-                Tweets = pd.concat([Tweets, tweets], ignore_index = True)
-                max_id = stopped_id
-                num += len(tweets)
-                if num % 100 == 0:
-                    print('{} tweets have been downloaded.'.format(num))
-            except RateLimitError:
-                for i in range(15):
-                    time.sleep(60)
-                    print('slept for {} minutes'.format(i+1))
-                print('can re-download now')
-            except:
+    Tweets = pd.DataFrame()
+    num = 0
+    max_id = None
+    while True:
+        try:
+            query = ticker + ' OR ' + full
+            tweets, stopped_id = TC.download_tweets(query, count = 100, until = '2020-12-09', max_id = max_id) 
+            Tweets = pd.concat([Tweets, tweets], ignore_index = True) 
+            if len(tweets) < 10: 
+                print('done')
                 print('all 7-day tweets have been downloaded.')
                 Tweets.to_csv('./tweets/' + ticker + '.csv')
-                break
+                return 
+            max_id = stopped_id
+            num += len(tweets)            
+            if num % 100 == 0:
+                print('{} tweets have been downloaded.'.format(num))
+        except RateLimitError:
+            for i in range(15):
+                time.sleep(60)
+                print('slept for {} minutes'.format(i+1))
+            print('can re-download now')
+        except:
+            print('all 7-day tweets have been downloaded.')
+            Tweets.to_csv('./tweets/' + ticker + '.csv') 
+            return
 
 
 if __name__ == '__main__':
-    main()
-    
-    
- 
-    
-   
-    
-    
-    
+    TC = TwitterClient()
+    '''
+    querydict = {'$ABT':'Abbott Laboratories','$AIZ':'Assurant','$APD':'Air Products and Chemicals','$BKR':'Baker Hughes Company', \
+                 '$BXP':'Boston Properties','$CSCO':'Cisco','$ETN':'Eaton','$FLT':'FLEETCOR', \
+                 '$GS':'The Goldman Sachs Group','$GWW':'W.W. Grainger', '$HCA':'HCA Healthcare','$WM':'Waste Management'}
+    '''
+    querydict = {'$BXP':'Boston Properties'}
+    for ticker, full in zip(querydict.keys(), querydict.values()):  
+        main(ticker, full)
+
+
 
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     
     
     
