@@ -7,7 +7,7 @@ Created on Sat Dec  5 13:58:23 2020
 """
 
 
-from tweepy import OAuthHandler
+from tweepy import OAuthHandler, RateLimitError
 import datetime
 from tweepy import API 
 import json
@@ -97,7 +97,7 @@ class TwitterClient(object):
         else: 
             return 'negative'
         
-    def download_tweets(self, query, count, max_id=None):
+    def download_tweets(self, query, count, until=None, max_id=None):
         def helper(tweets):
             df = pd.DataFrame(data=[tweet.text for tweet in tweets], columns=['text'])
             df['id'] = np.array([tweet.id for tweet in tweets])
@@ -107,38 +107,126 @@ class TwitterClient(object):
             df['retweets'] = np.array([tweet.retweet_count for tweet in tweets])
             df['followers'] = np.array([tweet.user.followers_count for tweet in tweets])
             df['text'] = df.text.apply(self.clean_tweet)   
-            df['sentiment'] = df.text.apply(self.get_sentiment,True)
+            df['sentiment'] = df.text.apply(self.get_sentiment, True)
             return df
 
         # api.user_timeline(screen_name, count, page) 
-        tweets = self.api.search(q=query + '-filter:retweets', lang='en', count=count, max_id=max_id)
-        stopped_id = tweets[-1].id
+        tweets = self.api.search(q=query + '-filter:retweets', lang='en', count=count, max_id=max_id,
+                                 until=until, result_type="recent")
+        if len(tweets):
+            stopped_id = tweets[-1].id
+        else:
+            stopped_id = None
         return helper(tweets), stopped_id
 
 
-def main():
+def get_oneday_tweets(ticker, full, idate:str):
     TC = TwitterClient()
     Tweets = pd.DataFrame()
     num = 0
     max_id = None
-    queries = ['Trump']  # query keyword
-    begin_date = np.datetime64('2020-11-28')
-    date = np.datetime64(datetime.datetime.now())
-    # can download up to 100 tweets every 15 minutes
-    for query in queries:
-        while date >= begin_date:
-            print('{} time download'.format(num // 100 + 1))
-            tweets, stopped_id = TC.download_tweets(query, count=100, max_id=max_id)
+    sleep_time = 0
+    actual_date = (pd.to_datetime(idate) - datetime.timedelta(days=1)).date()
+    while True:
+        try:
+            query = ticker + ' OR ' + full
+            tweets, stopped_id = TC.download_tweets(query, count=100, until=idate, max_id=max_id)
             Tweets = pd.concat([Tweets, tweets], ignore_index=True)
+            Tweets.to_csv('./tweets/' + ticker + '.csv')
+            if sleep_time != 0:
+                sleep_time = 0
+                print('can re-download now')
+
+            if len(Tweets) == 1:
+                print('No tweets found')
+                return
+            elif Tweets['createdate'][len(Tweets)-1].day != actual_date.day:
+                Tweets = Tweets[Tweets['createdate'].day == actual_date.day]
+                print('done')
+                print(str(actual_date) + '\'s tweets have been downloaded.')
+                Tweets.to_csv('./tweets/' + ticker + '_' + str(actual_date) + '.csv')
+                return
+            if len(tweets) == 0:
+                Tweets = Tweets[Tweets['createdate'].day == actual_date.day]
+                print('done')
+                print(str(actual_date)+'\'s tweets have been downloaded.')
+                Tweets.to_csv('./tweets/' + ticker + '_' + str(actual_date) +'.csv')
+                return
+
             max_id = stopped_id
             num += len(tweets)
-            date = tweets['createdate'][-1]
+            if num % 100 == 0:
+                print('{} tweets have been downloaded.'.format(num))
+        except RateLimitError:
+            time.sleep(60)
+            sleep_time += 1
+            print('slept for {} minutes'.format(sleep_time))
+
+        except:
+            print(str(actual_date) + '\'s tweets have been downloaded.')
+            Tweets.to_csv('./tweets/' + ticker + '_' + str(actual_date) + '.csv', index=False)
+            return
+
+
+def get_multidate_tweets(ticker, full, start_date: str, end_date: str):
+    datestart = datetime.datetime.strptime(start_date, '%Y-%m-%d')
+    datestart = (pd.to_datetime(datestart) + datetime.timedelta(days=1)).date()
+    dateend = datetime.datetime.strptime(end_date, '%Y-%m-%d')
+    dateend = (pd.to_datetime(dateend) + datetime.timedelta(days=1)).date()
+
+    datelist = []
+    while datestart <= dateend:
+        datelist.append(datestart.strftime('%Y-%m-%d'))
+        datestart += datetime.timedelta(days=1)
+
+    for idate in datelist:
+        get_oneday_tweets(ticker, full, idate)
+    print('all ' + str(len(datelist)) + ' tweets have been downloaded')
+
+    # TODO: open oneday tweets files and concats them together
+    return
+
+
+def main(ticker, full,unitl=None):
+    # can download up to 100 tweets every 15 minutes
+    TC = TwitterClient()
+    Tweets = pd.DataFrame()
+    num = 0
+    max_id = None
+    while True:
+        try:
+            query = ticker + ' OR ' + full
+            tweets, stopped_id = TC.download_tweets(query, count=100, max_id=max_id)
+            Tweets = pd.concat([Tweets, tweets], ignore_index=True)
+            if len(tweets) == 0:
+                print('done')
+                print('all 7-day tweets have been downloaded.')
+                Tweets.to_csv('./tweets/' + ticker + '.csv')
+                return
+            max_id = stopped_id
+            num += len(tweets)
+            if num % 100 == 0:
+                print('{} tweets have been downloaded.'.format(num))
+            if num > 1000:
+                Tweets.to_csv('./tweets/' + ticker + '.csv')
+        except RateLimitError:
             for i in range(15):
                 time.sleep(60)
                 print('slept for {} minutes'.format(i+1))
             print('can re-download now')
-        Tweets.to_csv(query+'.csv')
+        except:
+            print('all 7-day tweets have been downloaded.')
+            Tweets.to_csv('./tweets/' + ticker + '.csv', index=False)
+            return
 
 
 if __name__ == '__main__':
-    main()
+    # query keyword
+    querydict = {'BXP': 'Boston'}
+    start_date = '2020-11-29'
+    end_date = '2020-12-04'
+    # can download up to 100 tweets every 15 minutes
+    for ticker, full in querydict.items():
+        # main(ticker, full)
+        get_multidate_tweets(ticker, full, start_date, end_date)
+        # get_oneday_tweets(ticker, full, end_date)
