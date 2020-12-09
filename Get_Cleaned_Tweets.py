@@ -148,19 +148,9 @@ def main(ticker, full):
 
 if __name__ == '__main__':
     TC = TwitterClient()
-    '''
     querydict = {'$ABT':'Abbott Laboratories','$AIZ':'Assurant','$APD':'Air Products and Chemicals','$BKR':'Baker Hughes Company', \
                  '$BXP':'Boston Properties','$CSCO':'Cisco','$ETN':'Eaton','$FLT':'FLEETCOR', \
                  '$GS':'The Goldman Sachs Group','$GWW':'W.W. Grainger', '$HCA':'HCA Healthcare','$WM':'Waste Management'}
-    '''
-    querydict = {'$BXP':'Boston Properties'}
+    
     for ticker, full in zip(querydict.keys(), querydict.values()):  
         main(ticker, full)
-
-
-
-    
-
-    
-    
-    
