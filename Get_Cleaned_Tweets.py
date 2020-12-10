@@ -19,6 +19,8 @@ import matplotlib.pyplot as plt
 from textblob import TextBlob
 import re
 import time
+import os
+
 warnings.filterwarnings('ignore')
 
 
@@ -126,13 +128,16 @@ def get_oneday_tweets(ticker, full, idate:str):
     num = 0
     max_id = None
     sleep_time = 0
-    actual_date = (pd.to_datetime(idate) - datetime.timedelta(days=1)).date()
+    until_date = (pd.to_datetime(idate) + datetime.timedelta(days=1)).date()
+    actual_date = pd.to_datetime(idate).date()
     while True:
         try:
             query = ticker + ' OR ' + full
-            tweets, stopped_id = TC.download_tweets(query, count=100, until=idate, max_id=max_id)
+            # query = ticker
+            tweets, stopped_id = TC.download_tweets(query, count=100, until=until_date.strftime('%Y-%m-%d'), max_id=max_id)
+            tweets = tweets.drop_duplicates()
             Tweets = pd.concat([Tweets, tweets], ignore_index=True)
-            Tweets.to_csv('./tweets/' + ticker + '.csv')
+
             if sleep_time != 0:
                 sleep_time = 0
                 print('can re-download now')
@@ -140,15 +145,16 @@ def get_oneday_tweets(ticker, full, idate:str):
             if len(Tweets) == 1:
                 print('No tweets found')
                 return
-            elif Tweets['createdate'][len(Tweets)-1].day != actual_date.day:
-                Tweets = Tweets[Tweets['createdate'].day == actual_date.day]
+
+            if Tweets['createdate'][len(Tweets)-1].day != actual_date.day:
+                Tweets = Tweets[Tweets['createdate'].dt.day == actual_date.day]
                 print('done')
                 print(str(actual_date) + '\'s tweets have been downloaded.')
                 Tweets.to_csv('./tweets/' + ticker + '_' + str(actual_date) + '.csv')
                 return
-            if len(tweets) == 0:
-                Tweets = Tweets[Tweets['createdate'].day == actual_date.day]
-                print('done')
+            if len(tweets) <= 5:
+                Tweets = Tweets[Tweets['createdate'].dt.day == actual_date.day]
+                print('few data done')
                 print(str(actual_date)+'\'s tweets have been downloaded.')
                 Tweets.to_csv('./tweets/' + ticker + '_' + str(actual_date) +'.csv')
                 return
@@ -163,16 +169,15 @@ def get_oneday_tweets(ticker, full, idate:str):
             print('slept for {} minutes'.format(sleep_time))
 
         except:
+            Tweets = Tweets[Tweets['createdate'].dt.day == actual_date.day]
             print(str(actual_date) + '\'s tweets have been downloaded.')
             Tweets.to_csv('./tweets/' + ticker + '_' + str(actual_date) + '.csv', index=False)
             return
 
 
-def get_multidate_tweets(ticker, full, start_date: str, end_date: str):
+def get_multidate_tweets(ticker, full, start_date: str, end_date: str, delete=False):
     datestart = datetime.datetime.strptime(start_date, '%Y-%m-%d')
-    datestart = (pd.to_datetime(datestart) + datetime.timedelta(days=1)).date()
     dateend = datetime.datetime.strptime(end_date, '%Y-%m-%d')
-    dateend = (pd.to_datetime(dateend) + datetime.timedelta(days=1)).date()
 
     datelist = []
     while datestart <= dateend:
@@ -183,7 +188,16 @@ def get_multidate_tweets(ticker, full, start_date: str, end_date: str):
         get_oneday_tweets(ticker, full, idate)
     print('all ' + str(len(datelist)) + ' tweets have been downloaded')
 
-    # TODO: open oneday tweets files and concats them together
+    Tweets = pd.DataFrame()
+
+    for idate in datelist:
+        filename = './tweets/' + ticker + '_' + idate + '.csv'
+        tweets = pd.read_csv(filename)
+        Tweets = pd.concat([Tweets, tweets], ignore_index=True)
+        if delete:
+            os.remove(filename)
+    Tweets = Tweets.drop_duplicates()
+    Tweets.to_csv('./tweets/'+ticker+'_all.csv')
     return
 
 
@@ -222,11 +236,12 @@ def main(ticker, full,unitl=None):
 
 if __name__ == '__main__':
     # query keyword
-    querydict = {'BXP': 'Boston'}
+    querydict = {'$FLT': 'FleetCor'}
     start_date = '2020-11-29'
-    end_date = '2020-12-04'
+    end_date = '2020-12-08'
+
     # can download up to 100 tweets every 15 minutes
     for ticker, full in querydict.items():
         # main(ticker, full)
-        get_multidate_tweets(ticker, full, start_date, end_date)
+        get_multidate_tweets(ticker, full, start_date, end_date, True)
         # get_oneday_tweets(ticker, full, end_date)
