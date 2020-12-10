@@ -1,0 +1,8 @@
+/get_raw_tweets.py
+/tweets/*
+/ticker.txt
+/market_data.csv
+/SPY.csv
+/Statistic Analysis.ipynb
+/.ipynb_checkpoints/*
+/.idea/*
