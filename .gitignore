@@ -5,5 +5,5 @@
 /SPY.csv
 /figures/*
 /Statistic Analysis.ipynb
-/.ipynb_checkpoints
-/.idea
+/.ipynb_checkpoints/*
+/.idea/*
