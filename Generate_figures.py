@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Sat Dec  5 13:58:23 2020
-
 @author: Mengyao
 """
 
@@ -40,7 +39,7 @@ def get_aggregate_df(market_data, ticker, zoom=4):
 
     ticker_market_zoom['volatility'] = 2 * (ticker_market_zoom['high'] - ticker_market_zoom['low']) / (
                 ticker_market_zoom['low'] + ticker_market_zoom['high'])
-    ticker_market_zoom['return'] = np.log(ticker_market_zoom['close']) / np.log(ticker_market_zoom['open'])
+    ticker_market_zoom['return'] = np.log(ticker_market_zoom['close']) - np.log(ticker_market_zoom['open'])
 
     spy = pd.read_csv('SPY.csv')
     spy['timezoom'] = spy['TIME_M'].apply(lambda x: get_timezoom(x, zoom))
@@ -48,7 +47,7 @@ def get_aggregate_df(market_data, ticker, zoom=4):
     spy_zoom = pd.DataFrame(columns=['close', 'open'])
     spy_zoom['open'] = spy.groupby(['createdate'])['PRICE'].apply(lambda x: x.iloc[0])
     spy_zoom['close'] = spy.groupby(['createdate'])['PRICE'].apply(lambda x: x.iloc[-1])
-    spy_zoom['return'] = np.log(spy_zoom['close']) / np.log(spy_zoom['open'])
+    spy_zoom['return'] = np.log(spy_zoom['close']) - np.log(spy_zoom['open'])
 
     ticker_market_zoom['excess_return'] = ticker_market_zoom['return'] - spy_zoom['return']
     # ticker_market_zoom = ticker_market_zoom[['volume', 'volatility', 'excess_return']]
@@ -128,8 +127,13 @@ def draw_aggregate_graph(code, ticker_df, x, zoom):
     plt.setp(ax1.get_xticklabels(), visible=False)
 
     ax3 = plt.subplot(gs[3], sharex=ax0)
+<<<<<<< HEAD:Statistic Analysis.py
     line3 = ax3.bar(x, y3, color=colors[5])
     line4 = ax3.bar(x, -y4, color=green)
+=======
+    line3 = ax3.bar(x, y3, color='#00FF7F')
+    line4 = ax3.bar(x, -y4, color='#FF4500')
+>>>>>>> 569ec00f3802c2da2e35663f017b707135c87613:Generate_figures.py
     plt.setp(ax2.get_xticklabels(), visible=False)
 
     ax0.legend((line0, line1, line2, line3, line4), ('excess return', 'volatility', 'volume', 'pos', 'neg'), loc='lower left')
@@ -161,5 +165,5 @@ def main():
         draw_aggregate_graph(code, ticker_df, x, zoom)
 
 
-if __name__ == '__name__':
+if __name__ == '__main__':
     main()

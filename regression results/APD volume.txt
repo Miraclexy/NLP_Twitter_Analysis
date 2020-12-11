@@ -1,0 +1,30 @@
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                 volume   R-squared:                       0.059
+Model:                            OLS   Adj. R-squared:                 -0.082
+Method:                 Least Squares   F-statistic:                    0.4182
+Date:                Fri, 11 Dec 2020   Prob (F-statistic):              0.742
+Time:                        13:54:52   Log-Likelihood:                -33.160
+No. Observations:                  24   AIC:                             74.32
+Df Residuals:                      20   BIC:                             79.03
+Df Model:                           3                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+volume1       -0.0558      0.217     -0.257      0.800      -0.509       0.398
+volume2       -0.2375      0.218     -1.092      0.288      -0.691       0.216
+G             -0.1174      0.560     -0.210      0.836      -1.286       1.051
+B                   0          0        nan        nan           0           0
+const          0.0809      0.220      0.367      0.717      -0.378       0.540
+==============================================================================
+Omnibus:                        9.295   Durbin-Watson:                   2.049
+Prob(Omnibus):                  0.010   Jarque-Bera (JB):                7.671
+Skew:                           0.980   Prob(JB):                       0.0216
+Kurtosis:                       4.957   Cond. No.                          inf
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The smallest eigenvalue is      0. This might indicate that there are
+strong multicollinearity problems or that the design matrix is singular.

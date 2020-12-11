@@ -1,0 +1,28 @@
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:             volatility   R-squared:                       0.449
+Model:                            OLS   Adj. R-squared:                  0.320
+Method:                 Least Squares   F-statistic:                     3.468
+Date:                Fri, 11 Dec 2020   Prob (F-statistic):             0.0302
+Time:                        13:55:27   Log-Likelihood:                 82.324
+No. Observations:                  22   AIC:                            -154.6
+Df Residuals:                      17   BIC:                            -149.2
+Df Model:                           4                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+VOL1          -0.3212      0.208     -1.542      0.142      -0.761       0.118
+VOL2          -0.6688      0.227     -2.942      0.009      -1.149      -0.189
+G             -0.0014      0.002     -0.701      0.493      -0.005       0.003
+B              0.0012      0.002      0.466      0.647      -0.004       0.006
+const          0.0188      0.004      4.288      0.000       0.010       0.028
+==============================================================================
+Omnibus:                        0.380   Durbin-Watson:                   2.284
+Prob(Omnibus):                  0.827   Jarque-Bera (JB):                0.406
+Skew:                          -0.267   Prob(JB):                        0.816
+Kurtosis:                       2.602   Cond. No.                         249.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.

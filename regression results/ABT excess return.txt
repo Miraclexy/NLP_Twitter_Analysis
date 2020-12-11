@@ -1,0 +1,31 @@
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:          excess_return   R-squared:                       0.705
+Model:                            OLS   Adj. R-squared:                  0.409
+Method:                 Least Squares   F-statistic:                     2.386
+Date:                Fri, 11 Dec 2020   Prob (F-statistic):              0.210
+Time:                        13:54:39   Log-Likelihood:                -3.7999
+No. Observations:                   9   AIC:                             17.60
+Df Residuals:                       4   BIC:                             18.59
+Df Model:                           4                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+ER1           -0.4401      0.200     -2.205      0.092      -0.994       0.114
+ER2           -0.0813      0.195     -0.417      0.698      -0.622       0.460
+G             -0.1345      0.191     -0.704      0.520      -0.665       0.396
+B             -0.6013      0.378     -1.589      0.187      -1.652       0.449
+SR             0.7525      0.278      2.708      0.054      -0.019       1.524
+const          0.1512      0.274      0.552      0.610      -0.609       0.912
+==============================================================================
+Omnibus:                        0.278   Durbin-Watson:                   2.155
+Prob(Omnibus):                  0.870   Jarque-Bera (JB):                0.405
+Skew:                          -0.250   Prob(JB):                        0.817
+Kurtosis:                       2.089   Cond. No.                     1.94e+16
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The smallest eigenvalue is 1.44e-31. This might indicate that there are
+strong multicollinearity problems or that the design matrix is singular.
