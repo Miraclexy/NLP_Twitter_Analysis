@@ -1,27 +1,27 @@
                             OLS Regression Results                            
 ==============================================================================
-Dep. Variable:                   SIZE   R-squared:                       0.978
-Model:                            OLS   Adj. R-squared:                  0.911
-Method:                 Least Squares   F-statistic:                     14.69
-Date:                Thu, 10 Dec 2020   Prob (F-statistic):              0.189
-Time:                        23:31:56   Log-Likelihood:                -70.753
-No. Observations:                   5   AIC:                             149.5
-Df Residuals:                       1   BIC:                             147.9
+Dep. Variable:                 volume   R-squared:                       0.058
+Model:                            OLS   Adj. R-squared:                 -0.083
+Method:                 Least Squares   F-statistic:                    0.4136
+Date:                Fri, 11 Dec 2020   Prob (F-statistic):              0.745
+Time:                        13:55:00   Log-Likelihood:                -33.839
+No. Observations:                  24   AIC:                             75.68
+Df Residuals:                      20   BIC:                             80.39
 Df Model:                           3                                         
 Covariance Type:            nonrobust                                         
 ==============================================================================
                  coef    std err          t      P>|t|      [0.025      0.975]
 ------------------------------------------------------------------------------
-volume1        2.5874      0.553      4.678      0.134      -4.440       9.615
-volume2        0.3677      0.100      3.686      0.169      -0.900       1.635
-G           9.975e+06   1.68e+06      5.931      0.106   -1.14e+07    3.13e+07
+volume1       -0.1861      0.225     -0.825      0.419      -0.656       0.284
+volume2       -0.1635      0.215     -0.760      0.456      -0.612       0.285
+G             -0.1671      0.368     -0.454      0.655      -0.935       0.601
 B                   0          0        nan        nan           0           0
-const      -3.296e+07   9.05e+06     -3.642      0.171   -1.48e+08     8.2e+07
+const          0.0849      0.231      0.368      0.717      -0.396       0.566
 ==============================================================================
-Omnibus:                          nan   Durbin-Watson:                   0.987
-Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.660
-Skew:                          -0.863   Prob(JB):                        0.719
-Kurtosis:                       2.566   Cond. No.                          inf
+Omnibus:                       47.290   Durbin-Watson:                   2.101
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              218.804
+Skew:                           3.495   Prob(JB):                     3.07e-48
+Kurtosis:                      16.037   Cond. No.                          inf
 ==============================================================================
 
 Notes:

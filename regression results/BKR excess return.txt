@@ -1,28 +1,28 @@
                             OLS Regression Results                            
 ==============================================================================
-Dep. Variable:                  ExRET   R-squared:                       1.000
+Dep. Variable:          excess_return   R-squared:                       1.000
 Model:                            OLS   Adj. R-squared:                    nan
 Method:                 Least Squares   F-statistic:                       nan
-Date:                Thu, 10 Dec 2020   Prob (F-statistic):                nan
-Time:                        23:31:56   Log-Likelihood:                 141.90
-No. Observations:                   4   AIC:                            -275.8
-Df Residuals:                       0   BIC:                            -278.2
-Df Model:                           3                                         
+Date:                Fri, 11 Dec 2020   Prob (F-statistic):                nan
+Time:                        13:55:00   Log-Likelihood:                 67.038
+No. Observations:                   2   AIC:                            -130.1
+Df Residuals:                       0   BIC:                            -132.7
+Df Model:                           1                                         
 Covariance Type:            nonrobust                                         
 ==============================================================================
                  coef    std err          t      P>|t|      [0.025      0.975]
 ------------------------------------------------------------------------------
-ER1            0.3660        inf          0        nan         nan         nan
-ER2           -0.3464        inf         -0        nan         nan         nan
-G              0.0099        inf          0        nan         nan         nan
+ER1           -0.0876        inf         -0        nan         nan         nan
+ER2           -0.0072        inf         -0        nan         nan         nan
+G              0.2879        inf          0        nan         nan         nan
 B                   0        nan        nan        nan         nan         nan
-SR            -0.0015        inf         -0        nan         nan         nan
-const         -0.0015        inf         -0        nan         nan         nan
+SR             0.1385        inf          0        nan         nan         nan
+const          0.1385        inf          0        nan         nan         nan
 ==============================================================================
-Omnibus:                          nan   Durbin-Watson:                   1.111
-Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.474
-Skew:                          -0.326   Prob(JB):                        0.789
-Kurtosis:                       1.444   Cond. No.                         392.
+Omnibus:                          nan   Durbin-Watson:                   0.342
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.333
+Skew:                           0.000   Prob(JB):                        0.846
+Kurtosis:                       1.000   Cond. No.                         3.40
 ==============================================================================
 
 Notes:

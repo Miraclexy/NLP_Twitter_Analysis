@@ -1,30 +1,28 @@
                             OLS Regression Results                            
 ==============================================================================
-Dep. Variable:                    VOL   R-squared:                       1.000
-Model:                            OLS   Adj. R-squared:                    nan
-Method:                 Least Squares   F-statistic:                       nan
-Date:                Thu, 10 Dec 2020   Prob (F-statistic):                nan
-Time:                        23:32:06   Log-Likelihood:                 161.87
-No. Observations:                   5   AIC:                            -313.7
-Df Residuals:                       0   BIC:                            -315.7
+Dep. Variable:             volatility   R-squared:                       0.114
+Model:                            OLS   Adj. R-squared:                 -0.072
+Method:                 Least Squares   F-statistic:                    0.6121
+Date:                Fri, 11 Dec 2020   Prob (F-statistic):              0.659
+Time:                        13:55:06   Log-Likelihood:                -15.221
+No. Observations:                  24   AIC:                             40.44
+Df Residuals:                      19   BIC:                             46.33
 Df Model:                           4                                         
 Covariance Type:            nonrobust                                         
 ==============================================================================
                  coef    std err          t      P>|t|      [0.025      0.975]
 ------------------------------------------------------------------------------
-VOL1          -0.1003        inf         -0        nan         nan         nan
-VOL2           0.0260        inf          0        nan         nan         nan
-G             -0.0036        inf         -0        nan         nan         nan
-B              0.0154        inf          0        nan         nan         nan
-const          1.2933        inf          0        nan         nan         nan
+VOL1          -0.0503      0.297     -0.169      0.867      -0.671       0.571
+VOL2          -0.2399      0.231     -1.039      0.312      -0.723       0.244
+G              0.0476      0.105      0.451      0.657      -0.173       0.268
+B             -0.0572      0.273     -0.210      0.836      -0.628       0.514
+const          1.1942      0.346      3.449      0.003       0.469       1.919
 ==============================================================================
-Omnibus:                          nan   Durbin-Watson:                   0.299
-Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.520
-Skew:                           0.129   Prob(JB):                        0.771
-Kurtosis:                       1.441   Cond. No.                     4.22e+03
+Omnibus:                        5.240   Durbin-Watson:                   2.090
+Prob(Omnibus):                  0.073   Jarque-Bera (JB):                4.660
+Skew:                          -1.052   Prob(JB):                       0.0973
+Kurtosis:                       2.521   Cond. No.                         7.94
 ==============================================================================
 
 Notes:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
-[2] The condition number is large, 4.22e+03. This might indicate that there are
-strong multicollinearity or other numerical problems.

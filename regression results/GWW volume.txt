@@ -1,31 +1,28 @@
                             OLS Regression Results                            
 ==============================================================================
-Dep. Variable:                   SIZE   R-squared:                       1.000
-Model:                            OLS   Adj. R-squared:                    nan
-Method:                 Least Squares   F-statistic:                       nan
-Date:                Thu, 10 Dec 2020   Prob (F-statistic):                nan
-Time:                        23:32:58   Log-Likelihood:                 39.942
-No. Observations:                   3   AIC:                            -73.88
-Df Residuals:                       0   BIC:                            -76.59
-Df Model:                           2                                         
+Dep. Variable:                 volume   R-squared:                       0.004
+Model:                            OLS   Adj. R-squared:                 -0.245
+Method:                 Least Squares   F-statistic:                   0.01666
+Date:                Fri, 11 Dec 2020   Prob (F-statistic):              0.999
+Time:                        13:55:40   Log-Likelihood:                -30.658
+No. Observations:                  21   AIC:                             71.32
+Df Residuals:                      16   BIC:                             76.54
+Df Model:                           4                                         
 Covariance Type:            nonrobust                                         
 ==============================================================================
                  coef    std err          t      P>|t|      [0.025      0.975]
 ------------------------------------------------------------------------------
-volume1        0.9415        inf          0        nan         nan         nan
-volume2       -0.0485        inf         -0        nan         nan         nan
-G           1913.3834        inf          0        nan         nan         nan
-B            425.7509        inf          0        nan         nan         nan
-const         16.4646        inf          0        nan         nan         nan
+volume1       -0.0167      0.252     -0.066      0.948      -0.551       0.517
+volume2       -0.0349      0.250     -0.139      0.891      -0.565       0.495
+G             -0.2327      1.231     -0.189      0.852      -2.842       2.377
+B              0.1211      1.688      0.072      0.944      -3.457       3.700
+const          0.0309      0.274      0.113      0.912      -0.550       0.612
 ==============================================================================
-Omnibus:                          nan   Durbin-Watson:                   1.149
-Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.531
-Skew:                           0.707   Prob(JB):                        0.767
-Kurtosis:                       1.500   Cond. No.                     2.76e+05
+Omnibus:                       47.881   Durbin-Watson:                   1.105
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              205.681
+Skew:                           3.737   Prob(JB):                     2.17e-45
+Kurtosis:                      16.386   Cond. No.                         7.80
 ==============================================================================
 
 Notes:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
-[2] The input rank is higher than the number of observations.
-[3] The condition number is large, 2.76e+05. This might indicate that there are
-strong multicollinearity or other numerical problems.

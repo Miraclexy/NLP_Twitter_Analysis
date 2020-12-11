@@ -1,32 +1,29 @@
                             OLS Regression Results                            
 ==============================================================================
-Dep. Variable:                  ExRET   R-squared:                       1.000
-Model:                            OLS   Adj. R-squared:                    nan
-Method:                 Least Squares   F-statistic:                       nan
-Date:                Thu, 10 Dec 2020   Prob (F-statistic):                nan
-Time:                        23:32:06   Log-Likelihood:                 165.98
-No. Observations:                   5   AIC:                            -322.0
-Df Residuals:                       0   BIC:                            -323.9
-Df Model:                           4                                         
+Dep. Variable:          excess_return   R-squared:                       0.477
+Model:                            OLS   Adj. R-squared:                 -0.830
+Method:                 Least Squares   F-statistic:                    0.3651
+Date:                Fri, 11 Dec 2020   Prob (F-statistic):              0.843
+Time:                        13:55:06   Log-Likelihood:                -6.3177
+No. Observations:                   8   AIC:                             24.64
+Df Residuals:                       2   BIC:                             25.11
+Df Model:                           5                                         
 Covariance Type:            nonrobust                                         
 ==============================================================================
                  coef    std err          t      P>|t|      [0.025      0.975]
 ------------------------------------------------------------------------------
-ER1            0.0251        inf          0        nan         nan         nan
-ER2            0.4042        inf          0        nan         nan         nan
-G              0.0004        inf          0        nan         nan         nan
-B             -0.0042        inf         -0        nan         nan         nan
-SR             0.0134        inf          0        nan         nan         nan
-const         -0.1717        inf         -0        nan         nan         nan
+ER1            0.2010      0.655      0.307      0.788      -2.619       3.021
+ER2            0.7926      0.968      0.818      0.499      -3.374       4.959
+G             -0.0169      0.372     -0.045      0.968      -1.619       1.585
+B             -0.9182      1.154     -0.796      0.510      -5.882       4.045
+SR             0.6462      1.714      0.377      0.742      -6.730       8.023
+const          1.3417      1.155      1.162      0.365      -3.627       6.310
 ==============================================================================
-Omnibus:                          nan   Durbin-Watson:                   0.055
-Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.399
-Skew:                          -0.257   Prob(JB):                        0.819
-Kurtosis:                       1.716   Cond. No.                     6.04e+03
+Omnibus:                        1.798   Durbin-Watson:                   1.917
+Prob(Omnibus):                  0.407   Jarque-Bera (JB):                0.035
+Skew:                           0.055   Prob(JB):                        0.983
+Kurtosis:                       3.305   Cond. No.                         14.1
 ==============================================================================
 
 Notes:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
-[2] The input rank is higher than the number of observations.
-[3] The condition number is large, 6.04e+03. This might indicate that there are
-strong multicollinearity or other numerical problems.
