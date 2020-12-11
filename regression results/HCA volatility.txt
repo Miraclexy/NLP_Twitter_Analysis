@@ -1,0 +1,30 @@
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:             volatility   R-squared:                       0.540
+Model:                            OLS   Adj. R-squared:                  0.438
+Method:                 Least Squares   F-statistic:                     5.286
+Date:                Fri, 11 Dec 2020   Prob (F-statistic):            0.00539
+Time:                        13:55:47   Log-Likelihood:                 86.640
+No. Observations:                  23   AIC:                            -163.3
+Df Residuals:                      18   BIC:                            -157.6
+Df Model:                           4                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+VOL1          -0.1414      0.191     -0.740      0.469      -0.543       0.260
+VOL2          -0.0590      0.209     -0.283      0.781      -0.497       0.379
+G              0.0005      0.000      1.784      0.091    -8.6e-05       0.001
+B              0.0006      0.001      0.514      0.613      -0.002       0.003
+const          0.0090      0.005      1.854      0.080      -0.001       0.019
+==============================================================================
+Omnibus:                        1.628   Durbin-Watson:                   2.275
+Prob(Omnibus):                  0.443   Jarque-Bera (JB):                1.439
+Skew:                           0.536   Prob(JB):                        0.487
+Kurtosis:                       2.405   Cond. No.                     2.08e+03
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The condition number is large, 2.08e+03. This might indicate that there are
+strong multicollinearity or other numerical problems.
