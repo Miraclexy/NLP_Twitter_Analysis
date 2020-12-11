@@ -62,6 +62,10 @@ if __name__ == '__main__':
     for code in codes:
         try:
             ticker_df = get_market_data(code)
+            #normalization
+            ticker_df['ExRET'] = (ticker_df['ExRET']-np.mean(ticker_df['ExRET']))/np.std(ticker_df['ExRET'])
+            ticker_df['VOL'] = (ticker_df['VOL']-np.mean(ticker_df['VOL']))/np.std(ticker_df['VOL'])
+            ticker_df['SIZE'] = (ticker_df['SIZE']-np.mean(ticker_df['SIZE']))/np.std(ticker_df['SIZE'])
             ticker_df['G'] = ticker_df['positive'].shift(1)
             ticker_df['B'] = ticker_df['negative'].shift(1)
             ticker_df['ER1'] = ticker_df['ExRET'].shift(1)
