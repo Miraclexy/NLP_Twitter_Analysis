@@ -1,0 +1,30 @@
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                   SIZE   R-squared:                       1.000
+Model:                            OLS   Adj. R-squared:                    nan
+Method:                 Least Squares   F-statistic:                       nan
+Date:                Thu, 10 Dec 2020   Prob (F-statistic):                nan
+Time:                        23:31:25   Log-Likelihood:                 70.373
+No. Observations:                   5   AIC:                            -130.7
+Df Residuals:                       0   BIC:                            -132.7
+Df Model:                           4                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+volume1        0.2529        inf          0        nan         nan         nan
+volume2       -0.4094        inf         -0        nan         nan         nan
+G          -1.067e+06        inf         -0        nan         nan         nan
+B          -2.844e+06        inf         -0        nan         nan         nan
+const       1.691e+07        inf          0        nan         nan         nan
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   0.684
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.163
+Skew:                           0.304   Prob(JB):                        0.922
+Kurtosis:                       2.358   Cond. No.                     7.46e+07
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The condition number is large, 7.46e+07. This might indicate that there are
+strong multicollinearity or other numerical problems.

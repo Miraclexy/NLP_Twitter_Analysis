@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Sat Dec  5 13:58:23 2020
-
 @author: Mengyao
 """
 
@@ -40,7 +39,7 @@ def get_aggregate_df(market_data, ticker, zoom=4):
 
     ticker_market_zoom['volatility'] = 2 * (ticker_market_zoom['high'] - ticker_market_zoom['low']) / (
                 ticker_market_zoom['low'] + ticker_market_zoom['high'])
-    ticker_market_zoom['return'] = np.log(ticker_market_zoom['close']) / np.log(ticker_market_zoom['open'])
+    ticker_market_zoom['return'] = np.log(ticker_market_zoom['close']) - np.log(ticker_market_zoom['open'])
 
     spy = pd.read_csv('SPY.csv')
     spy['timezoom'] = spy['TIME_M'].apply(lambda x: get_timezoom(x, zoom))
@@ -48,7 +47,7 @@ def get_aggregate_df(market_data, ticker, zoom=4):
     spy_zoom = pd.DataFrame(columns=['close', 'open'])
     spy_zoom['open'] = spy.groupby(['createdate'])['PRICE'].apply(lambda x: x.iloc[0])
     spy_zoom['close'] = spy.groupby(['createdate'])['PRICE'].apply(lambda x: x.iloc[-1])
-    spy_zoom['return'] = np.log(spy_zoom['close']) / np.log(spy_zoom['open'])
+    spy_zoom['return'] = np.log(spy_zoom['close']) - np.log(spy_zoom['open'])
 
     ticker_market_zoom['excess_return'] = ticker_market_zoom['return'] - spy_zoom['return']
     # ticker_market_zoom = ticker_market_zoom[['volume', 'volatility', 'excess_return']]
@@ -93,15 +92,26 @@ def draw_aggregate_graph(code, ticker_df, x, zoom):
     y0 = ticker_df['excess_return']
     y1 = ticker_df['volatility']
     y2 = ticker_df['volume']
+    '''
     if 'positive' in ticker_df.columns and 'negative' in ticker_df.columns:
         y3 = ticker_df['positive'] - ticker_df['negative']
     elif 'positive' in ticker_df.columns:
         y3 = ticker_df['positive']
     else:
-        y3 = ticker_df['negative']
+        y3 = -ticker_df['negative']
+    '''
+    if 'positive' in ticker_df.columns:
+        y3 = ticker_df['positive']
+    else:
+        y3 = np.array([0]*len(ticker_df))
+    if 'negative' in ticker_df.columns:
+        y4 = ticker_df['negative']
+    else:
+        y4 = np.array([0]*len(ticker_df))
 
     sns.set_style("whitegrid")
     colors = sns.color_palette("RdBu_r")
+    green = sns.color_palette('BuGn_r')[0]
     fig = plt.figure(figsize=(20, 15))
     gs = gridspec.GridSpec(4, 1)
 
@@ -117,10 +127,11 @@ def draw_aggregate_graph(code, ticker_df, x, zoom):
     plt.setp(ax1.get_xticklabels(), visible=False)
 
     ax3 = plt.subplot(gs[3], sharex=ax0)
-    line3 = ax3.bar(x, y3, color=colors[5])
+    line3 = ax3.bar(x, y3, color='#00FF7F')
+    line4 = ax3.bar(x, -y4, color='#FF4500')
     plt.setp(ax2.get_xticklabels(), visible=False)
 
-    ax0.legend((line0, line1, line2, line3), ('excess return', 'volatility', 'volume', 'pos-neg'), loc='lower left')
+    ax0.legend((line0, line1, line2, line3, line4), ('excess return', 'volatility', 'volume', 'pos', 'neg'), loc='lower left')
 
     if zoom == 4:
         base = 3
@@ -149,5 +160,5 @@ def main():
         draw_aggregate_graph(code, ticker_df, x, zoom)
 
 
-if __name__ == '__name__':
+if __name__ == '__main__':
     main()

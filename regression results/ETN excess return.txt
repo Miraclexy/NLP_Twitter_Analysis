@@ -1,0 +1,32 @@
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                  ExRET   R-squared:                       1.000
+Model:                            OLS   Adj. R-squared:                    nan
+Method:                 Least Squares   F-statistic:                       nan
+Date:                Thu, 10 Dec 2020   Prob (F-statistic):                nan
+Time:                        23:32:27   Log-Likelihood:                 153.13
+No. Observations:                   5   AIC:                            -296.3
+Df Residuals:                       0   BIC:                            -298.2
+Df Model:                           4                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+ER1           -0.2029        inf         -0        nan         nan         nan
+ER2            0.1624        inf          0        nan         nan         nan
+G           8.837e-05        inf          0        nan         nan         nan
+B             -0.0002        inf         -0        nan         nan         nan
+SR            -0.0646        inf         -0        nan         nan         nan
+const          0.0193        inf          0        nan         nan         nan
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   0.109
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.342
+Skew:                          -0.241   Prob(JB):                        0.843
+Kurtosis:                       1.813   Cond. No.                     1.95e+05
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The input rank is higher than the number of observations.
+[3] The condition number is large, 1.95e+05. This might indicate that there are
+strong multicollinearity or other numerical problems.
