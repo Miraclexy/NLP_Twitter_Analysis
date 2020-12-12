@@ -111,7 +111,6 @@ def draw_aggregate_graph(code, ticker_df, x, zoom):
 
     sns.set_style("whitegrid")
     colors = sns.color_palette("RdBu_r")
-    green = sns.color_palette('BuGn_r')[0]
     fig = plt.figure(figsize=(20, 15))
     gs = gridspec.GridSpec(4, 1)
 
@@ -127,13 +126,10 @@ def draw_aggregate_graph(code, ticker_df, x, zoom):
     plt.setp(ax1.get_xticklabels(), visible=False)
 
     ax3 = plt.subplot(gs[3], sharex=ax0)
-<<<<<<< HEAD:Statistic Analysis.py
-    line3 = ax3.bar(x, y3, color=colors[5])
-    line4 = ax3.bar(x, -y4, color=green)
-=======
+
     line3 = ax3.bar(x, y3, color='#00FF7F')
     line4 = ax3.bar(x, -y4, color='#FF4500')
->>>>>>> 569ec00f3802c2da2e35663f017b707135c87613:Generate_figures.py
+
     plt.setp(ax2.get_xticklabels(), visible=False)
 
     ax0.legend((line0, line1, line2, line3, line4), ('excess return', 'volatility', 'volume', 'pos', 'neg'), loc='lower left')
