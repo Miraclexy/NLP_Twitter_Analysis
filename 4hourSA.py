@@ -9,63 +9,9 @@ import warnings
 warnings.filterwarnings('ignore')
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-import time
 import statsmodels.api as sm
+from Generate_figures import get_aggregate_df
 
-def get_aggregate_df(market_data, ticker, zoom=1):
-    def get_timezoom(x, zoom):
-        if x[1] != ':':
-            t = int(x[:2])
-        else:
-            t = int(x[0])
-        return str(t // zoom)
-
-    ticker_market = market_data[market_data['SYM_ROOT'] == ticker]
-    ticker_market['timezoom'] = ticker_market['TIME_M'].apply(lambda x: get_timezoom(x, zoom))
-    ticker_market['createdate'] = ticker_market['DATE'].apply(lambda x: str(x)) + ' ' + ticker_market['timezoom']
-    ticker_market = ticker_market[['SIZE', 'PRICE', 'createdate']]
-
-    ticker_size = ticker_market.groupby(['createdate']).sum()['SIZE']
-    ticker_high = ticker_market.groupby(['createdate']).max()['PRICE']
-    ticker_low = ticker_market.groupby(['createdate']).min()['PRICE']
-    ticker_open = ticker_market.groupby(['createdate'])['PRICE'].apply(lambda x: x.iloc[0])
-    ticker_close = ticker_market.groupby(['createdate'])['PRICE'].apply(lambda x: x.iloc[-1])
-    ticker_market_zoom = pd.DataFrame([ticker_size, ticker_high, ticker_low, ticker_open, ticker_close]).T
-    ticker_market_zoom.columns = ['volume', 'high', 'low', 'open', 'close']
-
-    ticker_market_zoom['volatility'] = 2 * (ticker_market_zoom['high'] - ticker_market_zoom['low']) / (
-                ticker_market_zoom['low'] + ticker_market_zoom['high'])
-    ticker_market_zoom['return'] = np.log(ticker_market_zoom['close']) / np.log(ticker_market_zoom['open'])
-
-    spy = pd.read_csv('SPY.csv')
-    spy['timezoom'] = spy['TIME_M'].apply(lambda x: get_timezoom(x, zoom))
-    spy['createdate'] = spy['DATE'].apply(lambda x: str(x)) + ' ' + spy['timezoom']
-    spy_zoom = pd.DataFrame(columns=['close', 'open'])
-    spy_zoom['open'] = spy.groupby(['createdate'])['PRICE'].apply(lambda x: x.iloc[0])
-    spy_zoom['close'] = spy.groupby(['createdate'])['PRICE'].apply(lambda x: x.iloc[-1])
-    spy_zoom['return'] = np.log(spy_zoom['close']) / np.log(spy_zoom['open'])
-
-    ticker_market_zoom['excess_return'] = ticker_market_zoom['return'] - spy_zoom['return']
-    # ticker_market_zoom = ticker_market_zoom[['volume', 'volatility', 'excess_return']]
-
-    ticker_tweet = pd.read_csv('./tweets/' + ticker + '.csv', index_col=0)
-    ticker_tweet['createdate'] = ticker_tweet['createdate'].apply(
-        lambda x: x[:4] + x[5:7] + x[8:10] + ' ' + str(int(x[12]) // zoom))
-    ticker_tweet_groupby = ticker_tweet.groupby(['createdate', 'sentiment']).size().unstack()
-
-    ticker = ticker_market_zoom.merge(ticker_tweet_groupby, on='createdate', how='outer').iloc[3:, :]
-
-    days = ['20201130', '20201201', '20201202', '20201203', '20201204', '20201207', '20201208']
-    zooms = [i for i in range(int(24 / zoom))]
-    x = []
-    for day in days:
-        for t in zooms:
-            x.append(day + ' ' + str(t))
-    empty_df = pd.DataFrame(index=x)
-    empty_df.index.name = 'createdate'
-    ticker = empty_df.merge(ticker, on='createdate', how='left').sort_index()
-    return ticker
 
 if __name__ == '__main__':
     market_data = pd.read_csv('market_data.csv')
